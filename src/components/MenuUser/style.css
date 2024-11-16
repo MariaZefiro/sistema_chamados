@@ -1,0 +1,120 @@
+/* Container Principal */
+.container-user {
+    font-family: "Arial", sans-serif;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #333;
+}
+
+/* Cabeçalho */
+.header-user {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header-user h1 {
+    font-size: 3rem;
+    color: #009373;
+}
+
+.header-user p {
+    font-size: 1.5rem;
+    color: #555;
+}
+
+/* Layout Principal */
+.main-user {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Formulário */
+.form-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-user label {
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+    display: block;
+}
+
+.form-user select,
+.form-user input,
+.form-user textarea {
+    width: 100%;
+    margin-top: 5px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.form-user button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #009373;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-user button:hover {
+    background-color: #00b68e;
+}
+
+/* Artigos */
+.articles-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.articles-section li {
+    margin-bottom: 10px;
+}
+
+.articles-section a {
+    color: #009373;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.articles-section a:hover {
+    text-decoration: underline;
+}
+
+/* Tabela */
+.tickets-section table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tickets-section th,
+.tickets-section td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+.tickets-section th {
+    background: #009373;
+    color: #fff;
+}
+
+.status-open {
+    color: #ff9800;
+}
+
+.status-resolved {
+    color: #4caf50;
+}

@@ -25,7 +25,7 @@ const MenuAdmin = () => {
                 <div className="container">
                     <div className="sidebar">
                         <div className="user-info">
-                            <img src="/images/logo_fundo.png" alt="User Profile Picture" />
+                            <img src="/images/logo_fundo.png" alt="User Profile" />
                             <p className="user-name">Maria Carolina Zefiro Couto</p>
                             <span className="user-options">Minha Conta | Logout</span>
                         </div>
