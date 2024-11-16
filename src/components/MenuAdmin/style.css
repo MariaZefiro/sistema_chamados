@@ -1,0 +1,373 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-width: 1200px;
+}
+
+header {
+    background-color: #fff;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-left,
+.header-right {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.header-left {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.user-name {
+    color: #009373;
+}
+
+.header-right {
+    float: right;
+}
+
+.language-selector {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.flag {
+    display: inline-block;
+    width: 16px;
+    height: 10px;
+    background-color: #009373;
+    margin-right: 5px;
+}
+
+.lang {
+    vertical-align: middle;
+}
+
+main {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    float: left;
+    width: 250px;
+    margin-right: 20px;
+}
+
+.user-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-info img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-size: cover;
+}
+
+.user-options {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.navigation ul {
+    list-style: none;
+    padding: 0;
+}
+
+.navigation li {
+    margin-bottom: 10px;
+}
+
+.nav-item {
+    display: flex;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-item.active {
+    background-color: #009373;
+    color: #fff;
+}
+
+.nav-item i {
+    margin-right: 10px;
+}
+
+.content {
+    float: left;
+    width: calc(100% - 290px);
+}
+
+.section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.all-departments,
+.new-tickets {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #009373;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.all-departments:hover,
+.new-tickets:hover {
+    background-color: #009373;
+}
+
+.tickets-count {
+    display: block;
+    text-align: right;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 0;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.documentation {
+    font-size: 0.9rem;
+}
+
+.icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-size: cover;
+    margin-right: 10px;
+}
+
+
+
+/* CONTAINER OPEN  */
+
+.container-pai-open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container-open {
+    width: 70%;
+    background-color: #fff;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.header-open {
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+.header-open h1 {
+    margin: 0;
+    font-size: 17px;
+}
+
+.header-open h2 {
+    font-size: 18px;
+}
+
+.header-open .flag-open {
+    display: inline-block;
+    width: 24px;
+    height: 16px;
+    background-color: #fff;
+    margin-left: 10px;
+    border-radius: 4px;
+}
+
+.header-open .flag-open::before {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 8px;
+    background-color: #009373;
+    margin: 4px 6px 4px 4px;
+}
+
+.header-open .flag-open::after {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 8px;
+    background-color: #009373;
+    margin: 4px 4px 4px 6px;
+}
+
+.content-open {
+    display: flex;
+    padding: 20px;
+    background-color: #ededeb;
+}
+
+.content-open .item-open {
+    width: 33.33%;
+    padding: 10px;
+    border-right: 1px solid #ddd;
+}
+
+.content-open .item-open:last-child {
+    border-right: none;
+}
+
+.content-open .item-open h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.content-open .item-open p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.content-open .item-open a {
+    color: #009373;
+    text-decoration: none;
+}
+
+.content-open .item-open a:hover {
+    text-decoration: underline;
+}
+
+
+
+/* CSS DO COMENTÁRIO  */
+
+.chat-container {
+    max-width: 70%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    min-width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.message img {
+    width: 40px;
+    height: 40px;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.message-content {
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    max-width: 90%;
+    min-width: 90%;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    background-color: silver;
+    padding: 10px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+
+.message-header .name {
+    font-weight: bold;
+}
+
+.message-header .role {
+    font-size: 12px;
+    color: #888;
+}
+
+.message-header .time {
+    font-size: 12px;
+    color: #888;
+}
+
+.message-body {
+    margin-top: 5px;
+    padding: 10px;
+}
