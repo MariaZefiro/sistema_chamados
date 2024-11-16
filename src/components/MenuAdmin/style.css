@@ -206,9 +206,6 @@ footer {
 }
 
 
-
-/* CONTAINER OPEN  */
-
 .container-pai-open {
     display: flex;
     justify-content: center;
@@ -306,10 +303,6 @@ footer {
     text-decoration: underline;
 }
 
-
-
-/* CSS DO COMENTÁRIO  */
-
 .chat-container {
     max-width: 70%;
     margin: 0 auto;
@@ -370,4 +363,15 @@ footer {
 .message-body {
     margin-top: 5px;
     padding: 10px;
+}
+
+.button-logout {
+    background-color: transparent;
+    border: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.button-logout:hover {
+    color: red;
 }

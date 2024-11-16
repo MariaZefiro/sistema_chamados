@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import ArticleIcon from '@mui/icons-material/Article';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import { useNavigate } from 'react-router-dom';
 
 const MenuAdmin = () => {
+    const [userType, setUserType] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const cachedData = localStorage.getItem('userData');
+        if (cachedData) {
+            const data = JSON.parse(cachedData);
+            if (data.tipo !== 'colaborador') {
+                navigate('/MenuUser');
+            } else {
+                setUserType(data.tipo);
+            }
+        } else {
+            navigate('/');
+        }
+    }, [navigate]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('userData');
+        navigate('/');
+    };
+
     return (
         <div>
             <header>
@@ -27,7 +50,7 @@ const MenuAdmin = () => {
                         <div className="user-info">
                             <img src="/images/logo_fundo.png" alt="User Profile" />
                             <p className="user-name">Maria Carolina Zefiro Couto</p>
-                            <span className="user-options">Minha Conta | Logout</span>
+                            <span className="user-options">Minha Conta | <button className='button-logout' onClick={handleLogout}>Logout</button></span>
                         </div>
                         <nav className="navigation">
                             <ul>

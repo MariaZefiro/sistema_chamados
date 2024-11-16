@@ -1,7 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
+import { useNavigate } from 'react-router-dom';
 
 const MenuUser = () => {
+    const [userType, setUserType] = useState(null);  
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const cachedData = localStorage.getItem('userData');
+        if (cachedData) {
+            const data = JSON.parse(cachedData);
+            if (data.tipo !== 'usuario') {
+                navigate('/MenuAdmin');
+            } else {
+                setUserType(data.tipo);
+            }
+        } else {
+            navigate('/');
+        }
+    }, [navigate]);
+
     const [formData, setFormData] = useState({
         category: "",
         subCategory: "",
@@ -32,7 +50,6 @@ const MenuUser = () => {
             </header>
 
             <main className="main-user">
-                {/* Formulário */}
                 <section className="form-section">
                     <h2>Abra um Chamado</h2>
                     <form onSubmit={handleFormSubmit} className="form-user">
@@ -88,8 +105,6 @@ const MenuUser = () => {
                         <button type="submit">Enviar Chamado</button>
                     </form>
                 </section>
-
-                {/* Artigos */}
                 <section className="articles-section">
                     <h2>Artigos</h2>
                     <ul className="articles-user">
@@ -104,8 +119,6 @@ const MenuUser = () => {
                         </li>
                     </ul>
                 </section>
-
-                {/* Chamados */}
                 <section className="tickets-section">
                     <h2>Seus Chamados</h2>
                     <table className="tickets-user">
