@@ -3,7 +3,10 @@ import "./style.css";
 import { useNavigate } from 'react-router-dom';
 
 const MenuUser = () => {
-    const [userType, setUserType] = useState(null);  
+    const [userType, setUserType] = useState(null);
+    const [userName, setUserName] = useState("");
+    const [userId, setUserId] = useState(null);
+    const [userSector, setUserSector] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,18 +17,36 @@ const MenuUser = () => {
                 navigate('/MenuAdmin');
             } else {
                 setUserType(data.tipo);
+                setUserName(data.nome.split(' ')[0]); 
+                setUserId(data.id); 
+                setUserSector(data.setor); 
             }
         } else {
             navigate('/');
         }
     }, [navigate]);
 
+    const handleLogout = () => {
+        localStorage.removeItem('userData');
+        navigate('/');
+    };
+
     const [formData, setFormData] = useState({
+        userId: null,
+        sector: "",
         category: "",
         subCategory: "",
         title: "",
         description: "",
     });
+
+    useEffect(() => {
+        setFormData((prev) => ({
+            ...prev,
+            userId: userId,
+            sector: userSector,
+        }));
+    }, [userId, userSector]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -45,14 +66,38 @@ const MenuUser = () => {
     return (
         <div className="container-user">
             <header className="header-user">
-                <h1>Portal de Suporte</h1>
+                <h1>Portal de Suporte </h1>
                 <p>Abra chamados, leia artigos e acompanhe seus chamados.</p>
             </header>
-
             <main className="main-user">
                 <section className="form-section">
-                    <h2>Abra um Chamado</h2>
+                    <h2 style={{ margin: '0px', display: 'flex', paddingBottom: '10px' }}>
+                        Olá <span className="user-name">{userName}</span>, abra um chamado
+                        <div style={{ marginLeft: '15px' }}>
+                            <button onClick={handleLogout} className="logout-button">
+                                Logout
+                            </button>
+                        </div>
+                    </h2>
                     <form onSubmit={handleFormSubmit} className="form-user">
+                        <label htmlFor="userId">Usuário</label>
+                        <input
+                            type="text"
+                            id="userId"
+                            name="userId"
+                            value={userName}
+                            readOnly
+                        />
+
+                        <label htmlFor="sector">Setor</label>
+                        <input
+                            type="text"
+                            id="sector"
+                            name="sector"
+                            value={userSector}
+                            readOnly
+                        />
+
                         <label htmlFor="category">Tipo de Problema</label>
                         <select
                             name="category"

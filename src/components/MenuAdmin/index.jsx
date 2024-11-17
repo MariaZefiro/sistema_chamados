@@ -7,7 +7,7 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 import { useNavigate } from 'react-router-dom';
 
 const MenuAdmin = () => {
-    const [userType, setUserType] = useState(null);
+    const [userData, setUserData] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,7 +17,7 @@ const MenuAdmin = () => {
             if (data.tipo !== 'colaborador') {
                 navigate('/MenuUser');
             } else {
-                setUserType(data.tipo);
+                setUserData(data);
             }
         } else {
             navigate('/');
@@ -29,12 +29,23 @@ const MenuAdmin = () => {
         navigate('/');
     };
 
+    const getGreeting = () => {
+        if (!userData) return 'Bem vindo!';
+        const { nome } = userData;
+        const primeiroNome = nome.split(' ')[0];
+        return (
+            <>
+                Bem-vindo, <span className="user-name">{primeiroNome}</span>
+            </>
+        );
+    };
+
     return (
         <div>
             <header>
                 <div className="container">
                     <div className="header-left">
-                        <h1>Bem vindo, <span className="user-name">Maria </span></h1>
+                        <h1>{getGreeting()}</h1>
                     </div>
                     <div className="header-right">
                         <div className="language-selector">
@@ -49,8 +60,10 @@ const MenuAdmin = () => {
                     <div className="sidebar">
                         <div className="user-info">
                             <img src="/images/logo_fundo.png" alt="User Profile" />
-                            <p className="user-name">Maria Carolina Zefiro Couto</p>
-                            <span className="user-options">Minha Conta | <button className='button-logout' onClick={handleLogout}>Logout</button></span>
+                            <p className="user-name">{userData?.nome}</p>
+                            <span className="user-options">
+                                Minha Conta | <button className="button-logout" onClick={handleLogout}>Logout</button>
+                            </span>
                         </div>
                         <nav className="navigation">
                             <ul>
