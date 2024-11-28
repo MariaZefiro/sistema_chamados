@@ -205,19 +205,32 @@ footer {
     margin-right: 10px;
 }
 
+.container-pai-open.open {
+    display: flex;
+    width: 100%;
+}
 
 .container-pai-open {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
 .container-open {
-    width: 70%;
+    width: 100%;
     background-color: #fff;
     overflow: hidden;
     padding: 20px;
+    margin: 0 auto;
+}
+
+.container-open2 {
+    width: 73%;
+    background-color: #fff;
+    overflow: hidden;
+    padding: 20px;
+    margin: 0 auto;
 }
 
 .header-open {
@@ -304,7 +317,7 @@ footer {
 }
 
 .chat-container {
-    max-width: 70%;
+    max-width: 100%;
     margin: 0 auto;
     background-color: #fff;
     padding: 20px;
@@ -374,4 +387,22 @@ footer {
 
 .button-logout:hover {
     color: red;
+}
+
+.form-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.select-edit {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.edit-buttons {
+    display: flex;
+    justify-content: space-between;
 }

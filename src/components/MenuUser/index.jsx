@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import { useNavigate } from 'react-router-dom';
+import config from "../../config";
 
 const MenuUser = () => {
+    const backendIp = config.backend_ip;
     const [userType, setUserType] = useState(null);
     const [userName, setUserName] = useState("");
     const [userId, setUserId] = useState(null);
     const [userSector, setUserSector] = useState("");
+    const [tickets, setTickets] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,14 +20,33 @@ const MenuUser = () => {
                 navigate('/MenuAdmin');
             } else {
                 setUserType(data.tipo);
-                setUserName(data.nome.split(' ')[0]); 
-                setUserId(data.id); 
-                setUserSector(data.setor); 
+                setUserName(data.nome.split(' ')[0]);
+                setUserId(data.id);
+                setUserSector(data.setor);
             }
         } else {
             navigate('/');
         }
     }, [navigate]);
+
+    useEffect(() => {
+        if (userId) {
+            const fetchTickets = async () => {
+                try {
+                    const response = await fetch(`${backendIp}/api/list_user_chamados/${userId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setTickets(data.chamados);
+                    } else {
+                        console.error("Erro ao buscar os chamados");
+                    }
+                } catch (error) {
+                    console.error("Erro ao conectar ao servidor:", error);
+                }
+            };
+            fetchTickets();
+        }
+    }, [userId, backendIp]);
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
@@ -53,10 +75,30 @@ const MenuUser = () => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
-        console.log("Chamado enviado:", formData);
+
+        try {
+            const response = await fetch(`${backendIp}/api/add_chamado`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message);
+            } else {
+                const error = await response.json();
+                alert(error.message || 'Erro ao enviar chamado');
+            }
+        } catch (err) {
+            alert('Erro ao conectar ao servidor');
+        }
     };
+
 
     const subCategoryOptions = {
         hardware: ["Problema físico", "Configuração de dispositivos", "Conexões"],
@@ -154,39 +196,63 @@ const MenuUser = () => {
                     <h2>Artigos</h2>
                     <ul className="articles-user">
                         <li>
-                            <a href="#">Como configurar seu dispositivo IoT</a>
+                            <a href="https://tecnoblog.net/389108/como-configurar-dispositivos-inteligentes-na-rede-wi-fi/" target="_blank" rel="noopener noreferrer">
+                                Como configurar dispositivos IoT na rede Wi-Fi
+                            </a>
                         </li>
                         <li>
-                            <a href="#">Soluções comuns para erros de rede</a>
+                            <a href="https://www.tecmundo.com.br/software/1955-como-resolver-problemas-comuns-no-windows.htm" target="_blank" rel="noopener noreferrer">
+                                Soluções comuns para erros no Windows
+                            </a>
                         </li>
                         <li>
-                            <a href="#">Melhores práticas para IA em suporte</a>
+                            <a href="https://www.oficinadanet.com.br/post/16646-erro-de-rede-windows" target="_blank" rel="noopener noreferrer">
+                                Como corrigir erros de rede no Windows
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://canaltech.com.br/seguranca/dicas-para-evitar-vazamentos-de-dados/" target="_blank" rel="noopener noreferrer">
+                                Melhores práticas para evitar vazamentos de dados
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://blog.kaspersky.com.br/como-identificar-seu-dispositivo-com-um-antivirus-eficaz/11543/" target="_blank" rel="noopener noreferrer">
+                                Como identificar e proteger dispositivos contra ameaças
+                            </a>
                         </li>
                     </ul>
                 </section>
                 <section className="tickets-section">
                     <h2>Seus Chamados</h2>
-                    <table className="tickets-user">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Título</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#1234</td>
-                                <td>Problema com dispositivo IoT</td>
-                                <td className="status-open">Aberto</td>
-                            </tr>
-                            <tr>
-                                <td>#1235</td>
-                                <td>Configuração de rede</td>
-                                <td className="status-resolved">Resolvido</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    {tickets.length > 0 ? (
+                        <table className="tickets-user">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Título</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tickets.map((ticket) => (
+                                    <tr key={ticket.numero}>
+                                        <td>{ticket.numero}</td>
+                                        <td>{ticket.titulo}</td>
+                                        <td
+                                            className={`status-${ticket.status.toLowerCase() === "aberto"
+                                                ? "open"
+                                                : "resolved"
+                                                }`}
+                                        >
+                                            {ticket.status}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <p>Nenhum chamado encontrado.</p>
+                    )}
                 </section>
             </main>
         </div>
