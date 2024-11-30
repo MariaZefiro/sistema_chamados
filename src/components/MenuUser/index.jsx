@@ -33,7 +33,7 @@ const MenuUser = () => {
         if (userId) {
             const fetchTickets = async () => {
                 try {
-                    const response = await fetch(`${backendIp}/api/list_user_chamados/${userId}`);
+                    const response = await fetch(`${backendIp}/api/list_chamado_usuario/${userId}`);
                     if (response.ok) {
                         const data = await response.json();
                         setTickets(data.chamados);

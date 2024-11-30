@@ -1,0 +1,44 @@
+header {
+    background-color: #fff;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-left,
+.header-right {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.header-left {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.user-name {
+    color: #009373;
+}
+
+.header-right {
+    float: right;
+}
+
+.language-selector {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.flag {
+    display: inline-block;
+    width: 16px;
+    height: 10px;
+    background-color: #009373;
+    margin-right: 5px;
+}
+
+.lang {
+    vertical-align: middle;
+}

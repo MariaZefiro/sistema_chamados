@@ -16,51 +16,6 @@ body {
     min-width: 1200px;
 }
 
-header {
-    background-color: #fff;
-    padding: 15px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header-left,
-.header-right {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.header-left {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.user-name {
-    color: #009373;
-}
-
-.header-right {
-    float: right;
-}
-
-.language-selector {
-    display: inline-block;
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.flag {
-    display: inline-block;
-    width: 16px;
-    height: 10px;
-    background-color: #009373;
-    margin-right: 5px;
-}
-
-.lang {
-    vertical-align: middle;
-}
-
 main {
     padding-top: 20px;
     display: flex;
@@ -156,33 +111,6 @@ tr:nth-child(even) {
     background-color: #dddddd;
 }
 
-.all-departments,
-.new-tickets {
-    display: inline-block;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #009373;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
-
-.all-departments:hover,
-.new-tickets:hover {
-    background-color: #009373;
-}
-
-.tickets-count {
-    display: block;
-    text-align: right;
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #888;
-}
-
 footer {
     background-color: #333;
     color: #fff;
@@ -226,11 +154,13 @@ footer {
 }
 
 .container-open2 {
-    width: 73%;
+    width: 100%;
     background-color: #fff;
     overflow: hidden;
     padding: 20px;
     margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
 }
 
 .header-open {
@@ -316,68 +246,6 @@ footer {
     text-decoration: underline;
 }
 
-.chat-container {
-    max-width: 100%;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    min-width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.message {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-.message img {
-    width: 40px;
-    height: 40px;
-    border-radius: 3px;
-    margin-right: 10px;
-}
-
-.message-content {
-    background-color: #f0f0f0;
-    border-radius: 3px;
-    max-width: 90%;
-    min-width: 90%;
-}
-
-.message-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-    background-color: silver;
-    padding: 10px;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
-}
-
-.message-header .name {
-    font-weight: bold;
-}
-
-.message-header .role {
-    font-size: 12px;
-    color: #888;
-}
-
-.message-header .time {
-    font-size: 12px;
-    color: #888;
-}
-
-.message-body {
-    margin-top: 5px;
-    padding: 10px;
-}
-
 .button-logout {
     background-color: transparent;
     border: none;
@@ -389,20 +257,25 @@ footer {
     color: red;
 }
 
-.form-edit {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.prioridade-container{
+    border-radius:5px;
+    padding:10px;
+    display:flex;
+    justify-content:center;
+    font-size: 15px;
 }
 
-.select-edit {
-    width: 70%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.alta-prioridade {
+    background-color: red;
+    color: white;
 }
 
-.edit-buttons {
-    display: flex;
-    justify-content: space-between;
+.media-prioridade {
+    background-color: orange;
+    color: white;
+}
+
+.baixa-prioridade {
+    background-color: green;
+    color: white;
 }
