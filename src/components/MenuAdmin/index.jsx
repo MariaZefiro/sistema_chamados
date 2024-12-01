@@ -10,6 +10,9 @@ import Header from '../Header';
 import TicketTable from '../TicketTable';
 import moment from "moment";
 import TicketFilter from '../TicketFilter';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import TicketSelected from '../TicketSelected';
 
 const MenuAdmin = () => {
     const backendIp = config.backend_ip;
@@ -17,6 +20,9 @@ const MenuAdmin = () => {
     const [tickets, setTickets] = useState([]);
     const [setorFiltro, setSetorFiltro] = useState('');
     const [filtroTicket, setFiltroTicket] = useState([]);
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
+    const limitePagina = 10;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -44,7 +50,7 @@ const MenuAdmin = () => {
             const response = await fetch(`${backendIp}/api/list_user_tickets/${colaboradorId}`);
             const data = await response.json();
             setTickets(data.tickets || []);
-            setFiltroTicket(data.tickets || []); 
+            setFiltroTicket(data.tickets || []);
         } catch (error) {
             console.error('Erro ao buscar tickets:', error);
         }
@@ -71,6 +77,33 @@ const MenuAdmin = () => {
             default:
                 return '';
         }
+    };
+
+    const totalPaginas = Math.ceil(tickets.length / limitePagina);
+
+    const ticketsExibidos = tickets.slice(
+        (paginaAtual - 1) * limitePagina,
+        paginaAtual * limitePagina
+    );
+
+    const handleNextPage = () => {
+        if (paginaAtual < totalPaginas) {
+            setPaginaAtual((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (paginaAtual > 1) {
+            setPaginaAtual((prevPage) => prevPage - 1);
+        }
+    };
+
+    const handleAbrirChamado = (ticket) => {
+        setChamadoSelecionado(ticket);
+    };
+
+    const handleVoltar = () => {
+        setChamadoSelecionado(null);
     };
 
     return (
@@ -129,10 +162,11 @@ const MenuAdmin = () => {
                                         <th>Departamento</th>
                                         <th>Autor</th>
                                         <th>Data</th>
+                                        <th>Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filtroTicket.map((ticket) => (
+                                    {ticketsExibidos.map((ticket) => (
                                         <tr key={ticket.ticket_id}>
                                             <td><div className={`${getCorPrioridade(ticket.prioridade)} prioridade-container`}>{ticket.prioridade}</div></td>
                                             <td>{ticket.status}</td>
@@ -141,12 +175,28 @@ const MenuAdmin = () => {
                                             <td>{ticket.setor}</td>
                                             <td>{ticket.usuario_nome}</td>
                                             <td>{moment(ticket.data).format('DD/MM HH[h]mm')}</td>
+                                            <td><a style={{ textDecoration: 'underline #009373', cursor: 'pointer', color: '#009373' }} onClick={() => handleAbrirChamado(ticket)}>Abrir</a></td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            <div className="paginacao">
+                                <NavigateBeforeIcon onClick={handlePrevPage} disabled={paginaAtual === 1} style={{ cursor: 'pointer' }} />
+                                <span style={{ fontSize: '13px', display: 'flex', alignItems: 'center', margin: '0 8px' }}>
+                                    Página {paginaAtual} de {totalPaginas}
+                                </span>
+                                <NavigateNextIcon onClick={handleNextPage} disabled={paginaAtual === totalPaginas} style={{ cursor: 'pointer' }} />
+                            </div>
                         </div>
                         <TicketTable />
+                        {chamadoSelecionado && (
+                            <div className="modal-overlay">
+                                <TicketSelected 
+                                    chamado={chamadoSelecionado} 
+                                    onVoltar={handleVoltar} 
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
             </main>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 import { useNavigate } from 'react-router-dom';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import config from "../../config";
 
 const MenuUser = () => {
@@ -10,6 +12,8 @@ const MenuUser = () => {
     const [userId, setUserId] = useState(null);
     const [userSector, setUserSector] = useState("");
     const [tickets, setTickets] = useState([]);
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const limitePagina = 10;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,22 +35,23 @@ const MenuUser = () => {
 
     useEffect(() => {
         if (userId) {
-            const fetchTickets = async () => {
-                try {
-                    const response = await fetch(`${backendIp}/api/list_chamado_usuario/${userId}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        setTickets(data.chamados);
-                    } else {
-                        console.error("Erro ao buscar os chamados");
-                    }
-                } catch (error) {
-                    console.error("Erro ao conectar ao servidor:", error);
-                }
-            };
             fetchTickets();
         }
     }, [userId, backendIp]);
+
+    const fetchTickets = async () => {
+        try {
+            const response = await fetch(`${backendIp}/api/list_chamado_usuario/${userId}`);
+            if (response.ok) {
+                const data = await response.json();
+                setTickets(data.chamados);
+            } else {
+                console.error("Erro ao buscar os chamados");
+            }
+        } catch (error) {
+            console.error("Erro ao conectar ao servidor:", error);
+        }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('userData');
@@ -90,6 +95,7 @@ const MenuUser = () => {
             if (response.ok) {
                 const result = await response.json();
                 alert(result.message);
+                fetchTickets();
             } else {
                 const error = await response.json();
                 alert(error.message || 'Erro ao enviar chamado');
@@ -99,10 +105,28 @@ const MenuUser = () => {
         }
     };
 
-
     const subCategoryOptions = {
         hardware: ["Problema físico", "Configuração de dispositivos", "Conexões"],
         software: ["Erro de software", "Instalação", "Atualização"],
+    };
+
+    const totalPaginas = Math.ceil(tickets.length / limitePagina);
+
+    const ticketsExibidos = tickets.slice(
+        (paginaAtual - 1) * limitePagina,
+        paginaAtual * limitePagina
+    );
+
+    const handleNextPage = () => {
+        if (paginaAtual < totalPaginas) {
+            setPaginaAtual((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (paginaAtual > 1) {
+            setPaginaAtual((prevPage) => prevPage - 1);
+        }
     };
 
     return (
@@ -148,8 +172,8 @@ const MenuUser = () => {
                             onChange={handleInputChange}
                         >
                             <option value="">Selecione</option>
-                            <option value="hardware">Hardware</option>
-                            <option value="software">Software</option>
+                            <option value="Hardware">Hardware</option>
+                            <option value="Software">Software</option>
                         </select>
 
                         {formData.category && (
@@ -225,31 +249,40 @@ const MenuUser = () => {
                 <section className="tickets-section">
                     <h2>Seus Chamados</h2>
                     {tickets.length > 0 ? (
-                        <table className="tickets-user">
-                            <thead>
-                                <tr>
-                                    <th>Número</th>
-                                    <th>Título</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {tickets.map((ticket) => (
-                                    <tr key={ticket.numero}>
-                                        <td>{ticket.numero}</td>
-                                        <td>{ticket.titulo}</td>
-                                        <td
-                                            className={`status-${ticket.status.toLowerCase() === "aberto"
-                                                ? "open"
-                                                : "resolved"
-                                                }`}
-                                        >
-                                            {ticket.status}
-                                        </td>
+                        <>
+                            <table className="tickets-user">
+                                <thead>
+                                    <tr>
+                                        <th>Número</th>
+                                        <th>Título</th>
+                                        <th>Status</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {ticketsExibidos.map((ticket) => (
+                                        <tr key={ticket.numero}>
+                                            <td>{ticket.numero}</td>
+                                            <td>{ticket.titulo}</td>
+                                            <td
+                                                className={`status-${ticket.status.toLowerCase() === "aberto"
+                                                    ? "open"
+                                                    : "resolved"
+                                                    }`}
+                                            >
+                                                {ticket.status}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <div className="paginacao">
+                                <NavigateBeforeIcon onClick={handlePrevPage} disabled={paginaAtual === 1} style={{ cursor: 'pointer' }} />
+                                <span style={{fontSize:'13px', display:'flex', alignItems:'center', margin:'0 8px'}}>
+                                    Página {paginaAtual} de {totalPaginas}
+                                </span>
+                                <NavigateNextIcon onClick={handleNextPage} disabled={paginaAtual === totalPaginas} style={{ cursor: 'pointer' }} />
+                            </div>
+                        </>
                     ) : (
                         <p>Nenhum chamado encontrado.</p>
                     )}
