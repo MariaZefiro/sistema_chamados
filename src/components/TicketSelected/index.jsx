@@ -14,9 +14,9 @@ const TicketSelected = ({ chamado, onVoltar }) => {
         fetchColaboradores();
         if (chamadoSelecionado) {
             console.log(chamadoSelecionado)
-            fetchColaboradoresChamado(chamadoSelecionado.ticket_id);
+            fetchColaboradoresChamado(chamadoSelecionado.id);
         }
-    }, [chamadoSelecionado]);  
+    }, [chamadoSelecionado]);
 
 
     const fetchColaboradores = async () => {
@@ -44,22 +44,30 @@ const TicketSelected = ({ chamado, onVoltar }) => {
     const handlePrioridadeChange = (event) => setPrioridadeEdicao(event.target.value);
 
     const salvarEdicao = async () => {
+        const payload = { id: chamadoSelecionado.id };
+
+        if (statusEdicao !== chamadoSelecionado.status) {
+            payload.status = statusEdicao;
+        }
+        if (prioridadeEdicao !== chamadoSelecionado.prioridade) {
+            payload.prioridade = prioridadeEdicao;
+        }
+        if (selecionados.length > 0) {
+            payload.colaboradores = selecionados;
+        }
+
         try {
             const response = await fetch(`${backendIp}/api/edit_chamado`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id: chamadoSelecionado.id,
-                    status: statusEdicao,
-                    prioridade: prioridadeEdicao,
-                    colaboradores: selecionados,
-                }),
+                body: JSON.stringify(payload),
             });
 
             if (response.ok) {
                 const atualizado = await response.json();
-                setChamadoSelecionado(null)
+                setChamadoSelecionado(null);
                 sairModoEdicao();
+                window.location.reload();
             } else {
                 console.error('Erro ao salvar edição');
             }
@@ -177,7 +185,8 @@ const TicketSelected = ({ chamado, onVoltar }) => {
                                     </select>
 
                                     <label className='label-edit' htmlFor="prioridade">Prioridade:</label>
-                                    <select className='select-edit' id="prioridade" defaultValue={chamadoSelecionado.prioridade} value={prioridadeEdicao} onChange={handlePrioridadeChange}>
+                                    <select className='select-edit' id="prioridade" defaultValue='' onChange={handlePrioridadeChange}>
+                                        <option value="" disabled>Selecione a prioridade</option>
                                         <option value="Alta">Alta</option>
                                         <option value="Média">Média</option>
                                         <option value="Baixa">Baixa</option>

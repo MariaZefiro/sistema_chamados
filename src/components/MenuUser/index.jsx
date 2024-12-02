@@ -106,8 +106,8 @@ const MenuUser = () => {
     };
 
     const subCategoryOptions = {
-        hardware: ["Problema físico", "Configuração de dispositivos", "Conexões"],
-        software: ["Erro de software", "Instalação", "Atualização"],
+        Hardware: ["Problema físico", "Configuração de dispositivos", "Conexões"],
+        Software: ["Erro de software", "Instalação", "Atualização"],
     };
 
     const totalPaginas = Math.ceil(tickets.length / limitePagina);

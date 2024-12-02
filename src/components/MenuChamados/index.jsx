@@ -1,58 +1,61 @@
-import React, { useEffect, useState, useRef } from 'react';
-import './style.css';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import config from "../../config";
+import TicketTable from '../TicketTable';
 import moment from "moment";
 import TicketFilter from '../TicketFilter';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import TicketSelected from '../TicketSelected';
 
-const TicketTable = ({ }) => {
+const MenuChamados = () => {
     const backendIp = config.backend_ip;
-    const [chamados, setChamados] = useState([]);
+    const [userData, setUserData] = useState(null);
+    const [tickets, setTickets] = useState([]);
     const [setorFiltro, setSetorFiltro] = useState('');
-    const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
+    const [filtroTicket, setFiltroTicket] = useState([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
+    const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
     const limitePagina = 5;
-
-    const ticketRefs = useRef({});
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchChamados();
-    }, [setorFiltro]);
+        const cachedData = localStorage.getItem('userData');
+        if (cachedData) {
+            const data = JSON.parse(cachedData);
+            if (data.tipo !== 'colaborador') {
+                navigate('/MenuUser');
+            } else {
+                setUserData(data);
+                fetchMeusTickets(data.id);
+            }
+        } else {
+            navigate('/');
+        }
+    }, [navigate]);
 
-    const fetchChamados = async () => {
+
+    const fetchMeusTickets = async (colaboradorId) => {
         try {
-            const response = await fetch(`${backendIp}/api/list_chamados?setor=${setorFiltro}`);
+            const response = await fetch(`${backendIp}/api/list_user_tickets/${colaboradorId}`);
             const data = await response.json();
-            const sortedTickets = data.chamados || [];
+            const sortedTickets = data.tickets || [];
             sortedTickets.sort((a, b) => moment(b.data).diff(moment(a.data)));
-            setChamados(sortedTickets);
+            setTickets(sortedTickets);
+            setFiltroTicket(sortedTickets);
         } catch (error) {
-            console.error('Erro ao buscar chamados:', error);
+            console.error('Erro ao buscar tickets:', error);
         }
     };
 
     const handleFilterChange = (setor) => {
         setSetorFiltro(setor);
-    };
-
-    const handleAbrirChamado = (ticket) => {
-        if (chamadoSelecionado && chamadoSelecionado.id === ticket.id) {
-            setChamadoSelecionado(null);
+        if (setor === '') {
+            setFiltroTicket(tickets);
         } else {
-            setChamadoSelecionado(ticket);
-            setTimeout(() => {
-                ticketRefs.current[ticket.id]?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start',
-                });
-            });
+            const filtered = tickets.filter(ticket => ticket.setor === setor);
+            setFiltroTicket(filtered);
         }
-    };
-
-    const handleVoltar = () => {
-        setChamadoSelecionado(null);
     };
 
     const getCorPrioridade = (prioridade) => {
@@ -68,9 +71,9 @@ const TicketTable = ({ }) => {
         }
     };
 
-    const totalPaginas = Math.ceil(chamados.length / limitePagina);
+    const totalPaginas = Math.ceil(tickets.length / limitePagina);
 
-    const ticketsExibidos = chamados.slice(
+    const ticketsExibidos = tickets.slice(
         (paginaAtual - 1) * limitePagina,
         paginaAtual * limitePagina
     );
@@ -87,11 +90,22 @@ const TicketTable = ({ }) => {
         }
     };
 
+    const handleAbrirChamado = (ticket) => {
+        if (chamadoSelecionado && chamadoSelecionado.id === ticket.id) {
+            setChamadoSelecionado(null);
+        } else {
+            setChamadoSelecionado(ticket);
+        }
+    };
+
+    const handleVoltar = () => {
+        setChamadoSelecionado(null);
+    };
+
     return (
         <div>
-            <div className="section tickets">
-                <h2>Novos Chamados</h2>
-                <p>Aqui você pode visualizar todos os chamados.</p>
+            <div className="section">
+                <h2>Meus Chamados</h2>
                 <TicketFilter handleFilterChange={handleFilterChange} />
                 <table>
                     <thead>
@@ -102,23 +116,23 @@ const TicketTable = ({ }) => {
                             <th>Mensagem</th>
                             <th>Departamento</th>
                             <th>Autor</th>
-                            <th style={{minWidth: '121px'}}>Data</th>
+                            <th style={{ minWidth: '121px' }}>Data</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {ticketsExibidos.map((chamado) => (
-                            <tr ref={(el) => (ticketRefs.current[chamado.id] = el)} key={chamado.id}>
-                                <td><div className={`${getCorPrioridade(chamado.prioridade)} prioridade-container`}>{chamado.prioridade}</div></td>
-                                <td>{chamado.status}</td>
-                                <td>{chamado.numero}</td>
-                                <td>{chamado.titulo}</td>
-                                <td>{chamado.setor}</td>
-                                <td>{chamado.usuario_nome}</td>
+                        {ticketsExibidos.map((ticket) => (
+                            <tr key={ticket.id}>
+                                <td><div className={`${getCorPrioridade(ticket.prioridade)} prioridade-container`}>{ticket.prioridade}</div></td>
+                                <td>{ticket.status}</td>
+                                <td>{ticket.numero}</td>
+                                <td>{ticket.titulo}</td>
+                                <td>{ticket.setor}</td>
+                                <td>{ticket.usuario_nome}</td>
                                 <td>
-                                    {moment(chamado.data).isSame(moment(), 'day')
-                                        ? `Hoje às ${moment(chamado.data).format('HH[h]mm')}`
-                                        : moment(chamado.data).format('DD/MM HH[h]mm')}
+                                    {moment(ticket.data).isSame(moment(), 'day')
+                                        ? `Hoje às ${moment(ticket.data).format('HH[h]mm')}`
+                                        : moment(ticket.data).format('DD/MM HH[h]mm')}
                                 </td>
                                 <td>
                                     <a
@@ -127,9 +141,9 @@ const TicketTable = ({ }) => {
                                             cursor: 'pointer',
                                             color: '#009373'
                                         }}
-                                        onClick={() => handleAbrirChamado(chamado)}
+                                        onClick={() => handleAbrirChamado(ticket)}
                                     >
-                                        {chamadoSelecionado && chamadoSelecionado.id === chamado.id ? "Fechar" : "Abrir"}
+                                        {chamadoSelecionado && chamadoSelecionado.id === ticket.id ? "Fechar" : "Abrir"}
                                     </a>
                                 </td>
                             </tr>
@@ -144,6 +158,7 @@ const TicketTable = ({ }) => {
                     <NavigateNextIcon onClick={handleNextPage} disabled={paginaAtual === totalPaginas} style={{ cursor: 'pointer' }} />
                 </div>
             </div>
+            <TicketTable />
             {chamadoSelecionado && (
                 <div className="modal-overlay">
                     <TicketSelected
@@ -156,4 +171,4 @@ const TicketTable = ({ }) => {
     );
 };
 
-export default TicketTable;
+export default MenuChamados;
