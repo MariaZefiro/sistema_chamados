@@ -53,7 +53,7 @@ const MenuChamados = () => {
         if (setor === '') {
             setFiltroTicket(tickets);
         } else {
-            const filtered = tickets.filter(ticket => ticket.setor === setor);
+            const filtered = tickets.filter(ticket => ticket.setor.toLowerCase().trim() === setor.toLowerCase().trim());
             setFiltroTicket(filtered);
         }
     };
@@ -71,12 +71,12 @@ const MenuChamados = () => {
         }
     };
 
-    const totalPaginas = Math.ceil(tickets.length / limitePagina);
+    const totalPaginas = Math.ceil(filtroTicket.length / limitePagina);
 
-    const ticketsExibidos = tickets.slice(
+    const ticketsExibidos = filtroTicket.slice(
         (paginaAtual - 1) * limitePagina,
         paginaAtual * limitePagina
-    );
+    );    
 
     const handleNextPage = () => {
         if (paginaAtual < totalPaginas) {

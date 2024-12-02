@@ -34,6 +34,7 @@ const TicketTable = ({ }) => {
     };
 
     const handleFilterChange = (setor) => {
+        console.log('Setor selecionado:', setor);
         setSetorFiltro(setor);
     };
 
