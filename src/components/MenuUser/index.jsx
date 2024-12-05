@@ -94,8 +94,14 @@ const MenuUser = () => {
 
             if (response.ok) {
                 const result = await response.json();
-                alert(result.message);
                 fetchTickets();
+                setFormData({
+                    category: "",
+                    subCategory: "",
+                    title: "",
+                    description: "",
+                });
+                alert('Chamado criado com sucesso!')
             } else {
                 const error = await response.json();
                 alert(error.message || 'Erro ao enviar chamado');
@@ -202,6 +208,7 @@ const MenuUser = () => {
                             name="title"
                             placeholder="Resumo do problema"
                             onChange={handleInputChange}
+                            value={formData.title}
                         />
 
                         <label htmlFor="description">Descrição</label>
@@ -211,6 +218,7 @@ const MenuUser = () => {
                             rows="4"
                             placeholder="Descreva seu problema"
                             onChange={handleInputChange}
+                            value={formData.description}
                         ></textarea>
 
                         <button type="submit">Enviar Chamado</button>
@@ -277,7 +285,7 @@ const MenuUser = () => {
                             </table>
                             <div className="paginacao">
                                 <NavigateBeforeIcon onClick={handlePrevPage} disabled={paginaAtual === 1} style={{ cursor: 'pointer' }} />
-                                <span style={{fontSize:'13px', display:'flex', alignItems:'center', margin:'0 8px'}}>
+                                <span style={{ fontSize: '13px', display: 'flex', alignItems: 'center', margin: '0 8px' }}>
                                     Página {paginaAtual} de {totalPaginas}
                                 </span>
                                 <NavigateNextIcon onClick={handleNextPage} disabled={paginaAtual === totalPaginas} style={{ cursor: 'pointer' }} />

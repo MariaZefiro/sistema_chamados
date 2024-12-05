@@ -13,7 +13,6 @@ const TicketSelected = ({ chamado, onVoltar }) => {
     useEffect(() => {
         fetchColaboradores();
         if (chamadoSelecionado) {
-            console.log(chamadoSelecionado)
             fetchColaboradoresChamado(chamadoSelecionado.id);
         }
     }, [chamadoSelecionado]);

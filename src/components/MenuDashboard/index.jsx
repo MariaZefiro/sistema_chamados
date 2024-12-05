@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Bar, Pie, Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, PointElement, LineElement } from 'chart.js';
+import { Bar, Line, Doughnut, Radar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, PointElement, LineElement, RadialLinearScale, } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, PointElement, LineElement);
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, PointElement, LineElement, RadialLinearScale);
 
 const MenuDashboard = () => {
     const [chamados, setChamados] = useState([]);
@@ -37,7 +37,7 @@ const MenuDashboard = () => {
         ],
     };
 
-    const pieData = {
+    const doughnutData = {
         labels: ['Resolvidos', 'Pendentes'],
         datasets: [
             {
@@ -60,11 +60,24 @@ const MenuDashboard = () => {
         ],
     };
 
+    const radarData = {
+        labels: ['TI', 'RH', 'Financeiro'],
+        datasets: [
+            {
+                label: 'Chamados Resolvidos',
+                data: [10, 2, 3],
+                backgroundColor: 'rgba(153,102,255,0.2)',
+                borderColor: '#9966FF',
+                pointBackgroundColor: '#9966FF',
+            },
+        ],
+    };
+
     return (
         <div>
             <div className="section">
                 <h2>Meu Dashboard</h2>
-                <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap', justifyContent:'center' }}>
+                <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap', justifyContent: 'center' }}>
                     <div style={{ width: '30%', minWidth: '300px' }}>
                         <h3>Chamados por Categoria</h3>
                         <Bar data={barData} />
@@ -74,8 +87,12 @@ const MenuDashboard = () => {
                         <Line data={lineData} />
                     </div>
                     <div style={{ width: '30%', minWidth: '300px' }}>
+                        <h3>Chamados no Radar</h3>
+                        <Radar data={radarData} />
+                    </div>
+                    <div style={{ width: '30%', minWidth: '300px' }}>
                         <h3>Status dos Chamados</h3>
-                        <Pie data={pieData} />
+                        <Doughnut data={doughnutData} />
                     </div>
                 </div>
             </div>

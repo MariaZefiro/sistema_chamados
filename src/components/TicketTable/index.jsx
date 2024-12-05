@@ -6,20 +6,34 @@ import TicketFilter from '../TicketFilter';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import TicketSelected from '../TicketSelected';
+import socket from '../../socket';
 
-const TicketTable = ({ }) => {
+const TicketTable = ({ chamadoSelecionado, handleAbrirChamado }) => {
     const backendIp = config.backend_ip;
     const [chamados, setChamados] = useState([]);
     const [setorFiltro, setSetorFiltro] = useState('');
-    const [chamadoSelecionado, setChamadoSelecionado] = useState(null);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const limitePagina = 5;
-
-    const ticketRefs = useRef({});
 
     useEffect(() => {
         fetchChamados();
     }, [setorFiltro]);
+
+    useEffect(() => {
+        socket.on("novo_chamado", (data) => {
+            setChamados((prevChamados) => {
+                const updatedChamados = [data, ...prevChamados];
+                return updatedChamados.sort((a, b) => moment(b.data).diff(moment(a.data)));
+            });
+            return () => {
+                socket.off("novo_chamado");
+            };
+        });
+
+        return () => {
+            socket.off("novo_chamado");
+        };
+    }, []);
 
     const fetchChamados = async () => {
         try {
@@ -34,26 +48,7 @@ const TicketTable = ({ }) => {
     };
 
     const handleFilterChange = (setor) => {
-        console.log('Setor selecionado:', setor);
         setSetorFiltro(setor);
-    };
-
-    const handleAbrirChamado = (ticket) => {
-        if (chamadoSelecionado && chamadoSelecionado.id === ticket.id) {
-            setChamadoSelecionado(null);
-        } else {
-            setChamadoSelecionado(ticket);
-            setTimeout(() => {
-                ticketRefs.current[ticket.id]?.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start',
-                });
-            });
-        }
-    };
-
-    const handleVoltar = () => {
-        setChamadoSelecionado(null);
     };
 
     const getCorPrioridade = (prioridade) => {
@@ -103,36 +98,36 @@ const TicketTable = ({ }) => {
                             <th>Mensagem</th>
                             <th>Departamento</th>
                             <th>Autor</th>
-                            <th style={{minWidth: '121px'}}>Data</th>
+                            <th style={{ minWidth: '121px' }}>Data</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {ticketsExibidos.map((chamado) => (
-                            <tr ref={(el) => (ticketRefs.current[chamado.id] = el)} key={chamado.id}>
-                                <td><div className={`${getCorPrioridade(chamado.prioridade)} prioridade-container`}>{chamado.prioridade}</div></td>
-                                <td>{chamado.status}</td>
-                                <td>{chamado.numero}</td>
-                                <td>{chamado.titulo}</td>
-                                <td>{chamado.setor}</td>
-                                <td>{chamado.usuario_nome}</td>
+                        {ticketsExibidos.map((ticket) => (
+                            <tr key={ticket.id}>
+                                <td><div className={`${getCorPrioridade(ticket.prioridade)} prioridade-container`}>{ticket.prioridade}</div></td>
+                                <td>{ticket.status}</td>
+                                <td>{ticket.numero}</td>
+                                <td>{ticket.titulo}</td>
+                                <td>{ticket.setor}</td>
+                                <td>{ticket.usuario_nome}</td>
                                 <td>
-                                    {moment(chamado.data).isSame(moment(), 'day')
-                                        ? `Hoje às ${moment(chamado.data).format('HH[h]mm')}`
-                                        : moment(chamado.data).format('DD/MM HH[h]mm')}
+                                    {moment(ticket.data).isSame(moment(), 'day')
+                                        ? `Hoje às ${moment(ticket.data).format('HH[h]mm')}`
+                                        : moment(ticket.data).format('DD/MM HH[h]mm')}
                                 </td>
                                 <td>
-                                    <a
-                                        style={{
-                                            textDecoration: 'underline #009373',
-                                            cursor: 'pointer',
-                                            color: '#009373'
-                                        }}
-                                        onClick={() => handleAbrirChamado(chamado)}
-                                    >
-                                        {chamadoSelecionado && chamadoSelecionado.id === chamado.id ? "Fechar" : "Abrir"}
-                                    </a>
-                                </td>
+                                <a
+                                    onClick={() => handleAbrirChamado(ticket)}
+                                    style={{
+                                        textDecoration: 'underline #009373',
+                                        cursor: 'pointer',
+                                        color: '#009373'
+                                    }}
+                                >
+                                    {chamadoSelecionado && chamadoSelecionado.id === ticket.id ? 'Fechar' : 'Abrir'}
+                                </a>
+                            </td>
                             </tr>
                         ))}
                     </tbody>
@@ -145,14 +140,6 @@ const TicketTable = ({ }) => {
                     <NavigateNextIcon onClick={handleNextPage} disabled={paginaAtual === totalPaginas} style={{ cursor: 'pointer' }} />
                 </div>
             </div>
-            {chamadoSelecionado && (
-                <div className="modal-overlay">
-                    <TicketSelected
-                        chamado={chamadoSelecionado}
-                        onVoltar={handleVoltar}
-                    />
-                </div>
-            )}
         </div>
     );
 };

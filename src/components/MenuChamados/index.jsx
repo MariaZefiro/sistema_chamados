@@ -34,7 +34,6 @@ const MenuChamados = () => {
         }
     }, [navigate]);
 
-
     const fetchMeusTickets = async (colaboradorId) => {
         try {
             const response = await fetch(`${backendIp}/api/list_user_tickets/${colaboradorId}`);
@@ -76,7 +75,7 @@ const MenuChamados = () => {
     const ticketsExibidos = filtroTicket.slice(
         (paginaAtual - 1) * limitePagina,
         paginaAtual * limitePagina
-    );    
+    );
 
     const handleNextPage = () => {
         if (paginaAtual < totalPaginas) {
@@ -95,6 +94,12 @@ const MenuChamados = () => {
             setChamadoSelecionado(null);
         } else {
             setChamadoSelecionado(ticket);
+            setTimeout(() => {
+                window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth', 
+                });
+            }, 100); 
         }
     };
 
@@ -158,7 +163,10 @@ const MenuChamados = () => {
                     <NavigateNextIcon onClick={handleNextPage} disabled={paginaAtual === totalPaginas} style={{ cursor: 'pointer' }} />
                 </div>
             </div>
-            <TicketTable />
+            <TicketTable
+                chamadoSelecionado={chamadoSelecionado}
+                handleAbrirChamado={handleAbrirChamado}
+            />
             {chamadoSelecionado && (
                 <div className="modal-overlay">
                     <TicketSelected
