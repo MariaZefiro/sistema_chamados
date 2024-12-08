@@ -7,7 +7,6 @@ import config from "../../config";
 
 const MenuUser = () => {
     const backendIp = config.backend_ip;
-    const [userType, setUserType] = useState(null);
     const [userName, setUserName] = useState("");
     const [userId, setUserId] = useState(null);
     const [userSector, setUserSector] = useState("");
@@ -23,7 +22,6 @@ const MenuUser = () => {
             if (data.tipo !== 'usuario') {
                 navigate('/MenuAdmin');
             } else {
-                setUserType(data.tipo);
                 setUserName(data.nome.split(' ')[0]);
                 setUserId(data.id);
                 setUserSector(data.setor);
@@ -37,7 +35,7 @@ const MenuUser = () => {
         if (userId) {
             fetchTickets();
         }
-    }, [userId, backendIp]);
+    }, [userId]);
 
     const fetchTickets = async () => {
         try {
@@ -228,28 +226,33 @@ const MenuUser = () => {
                     <h2>Artigos</h2>
                     <ul className="articles-user">
                         <li>
-                            <a href="https://tecnoblog.net/389108/como-configurar-dispositivos-inteligentes-na-rede-wi-fi/" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.asus.com/br/support/faq/1053540/" target="_blank" rel="noopener noreferrer">
                                 Como configurar dispositivos IoT na rede Wi-Fi
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.tecmundo.com.br/software/1955-como-resolver-problemas-comuns-no-windows.htm" target="_blank" rel="noopener noreferrer">
+                            <a href="https://recoverit.wondershare.com.br/windows-10/windows-10-common-problems-and-how-to-fix-them.html" target="_blank" rel="noopener noreferrer">
                                 Soluções comuns para erros no Windows
                             </a>
                         </li>
                         <li>
-                            <a href="https://www.oficinadanet.com.br/post/16646-erro-de-rede-windows" target="_blank" rel="noopener noreferrer">
+                            <a href="https://support.microsoft.com/pt-br/windows/corrigir-problemas-de-conex%C3%A3o-wi-fi-no-windows-9424a1f7-6a3b-65a6-4d78-7f07eee84d2c" target="_blank" rel="noopener noreferrer">
                                 Como corrigir erros de rede no Windows
                             </a>
                         </li>
                         <li>
-                            <a href="https://canaltech.com.br/seguranca/dicas-para-evitar-vazamentos-de-dados/" target="_blank" rel="noopener noreferrer">
+                            <a href="https://www.knowsolution.com.br/melhores-praticas-evitar-vazamento-dados/" target="_blank" rel="noopener noreferrer">
                                 Melhores práticas para evitar vazamentos de dados
                             </a>
                         </li>
                         <li>
-                            <a href="https://blog.kaspersky.com.br/como-identificar-seu-dispositivo-com-um-antivirus-eficaz/11543/" target="_blank" rel="noopener noreferrer">
-                                Como identificar e proteger dispositivos contra ameaças
+                            <a href="https://tisec.com.br/protegendo-sua-vida-online-dicas-para-identificar-e-prevenir-ciberataques/" target="_blank" rel="noopener noreferrer">
+                                Como identificar e proteger contra ameaças
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.tecmundo.com.br/conexao/1955-o-que-e-intranet-e-extranet-.htm" target="_blank" rel="noopener noreferrer">
+                            O que é intranet e extranet?
                             </a>
                         </li>
                     </ul>

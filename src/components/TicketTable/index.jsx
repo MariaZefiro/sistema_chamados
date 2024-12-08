@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.css';
 import config from "../../config";
 import moment from "moment";
 import TicketFilter from '../TicketFilter';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import TicketSelected from '../TicketSelected';
 import socket from '../../socket';
 
 const TicketTable = ({ chamadoSelecionado, handleAbrirChamado }) => {

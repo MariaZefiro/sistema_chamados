@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import moment from "moment";
 import config from "../../config";
 
 const TicketSelected = ({ chamado, onVoltar }) => {
@@ -117,8 +118,8 @@ const TicketSelected = ({ chamado, onVoltar }) => {
                                             <p><a>{chamadoSelecionado.setor}</a></p>
                                         </div>
                                         <div className="item-open">
-                                            <h2>Tags</h2>
-                                            <p><a>None</a></p>
+                                            <h2>Data</h2>
+                                            <p><a>{moment(chamadoSelecionado.data).isSame(moment(), 'day') ? `Hoje às ${moment(chamadoSelecionado.data).format('HH[h]mm')}`: moment(chamadoSelecionado.data).format('DD/MM HH[h]mm')}</a></p>
                                         </div>
                                         <div className="item-open">
                                             <h2>Colaborador(es)</h2>

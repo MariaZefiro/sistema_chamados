@@ -3,7 +3,6 @@ import './style.css';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import ArticleIcon from '@mui/icons-material/Article';
-import ConstructionIcon from '@mui/icons-material/Construction';
 import { useNavigate } from 'react-router-dom';
 import config from "../../config";
 import Header from '../Header';
@@ -15,8 +14,6 @@ import MenuDashboard from '../MenuDashboard';
 const MenuAdmin = () => {
     const backendIp = config.backend_ip;
     const [userData, setUserData] = useState(null);
-    const [tickets, setTickets] = useState([]);
-    const [filtroTicket, setFiltroTicket] = useState([]);
     const [activeMenu, setActiveMenu] = useState('chamados');
     const navigate = useNavigate();
 
@@ -46,8 +43,6 @@ const MenuAdmin = () => {
             const data = await response.json();
             const sortedTickets = data.tickets || [];
             sortedTickets.sort((a, b) => moment(b.data).diff(moment(a.data)));
-            setTickets(sortedTickets);
-            setFiltroTicket(sortedTickets);
         } catch (error) {
             console.error('Erro ao buscar tickets:', error);
         }
@@ -100,12 +95,6 @@ const MenuAdmin = () => {
                                     >
                                         <ArticleIcon />
                                         <span>Artigos</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="nav-item">
-                                        <ConstructionIcon />
-                                        <span>Configurações</span>
                                     </a>
                                 </li>
                             </ul>
